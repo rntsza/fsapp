@@ -55,10 +55,6 @@ import { FormEvent, useState } from 'react';
 
   return (
     <>
-      <Head>
-        <title>Account Balances Page.tsx detro do src/app</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
-      </Head>
       <div className="bg-gray-100 p-8 min-h-screen flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden p-5">
           <h2 className="text-lg font-semibold text-gray-700">Initialize Account Balances</h2>

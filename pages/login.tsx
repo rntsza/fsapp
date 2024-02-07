@@ -33,10 +33,6 @@ export default function Login() {
 
   return (
     <>
-      <Head>
-        <title>{isLogin ? 'Login' : 'Sign Up'}</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-      </Head>
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
           <h1 className="text-xl font-bold mb-8">{isLogin ? 'Login' : 'Create Account'}</h1>
