@@ -1,19 +1,18 @@
-// pages/login.js ou pages/auth.js
 import { useState } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
 
 export default function Login() {
-  const [isLogin, setIsLogin] = useState(true); // Alternar entre login e criação
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); // Apenas para simular, substitua conforme sua lógica de autenticação
+  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [savingsBalance, setSavingsBalance] = useState('');
   const [checkingsBalance, setCheckingsBalance] = useState('');
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const url = isLogin ? '/api/login' : '/api/users/create'; // Substitua '/api/login' pelo seu endpoint de login real
+    const url = isLogin ? '/api/login' : '/api/users/create';
 
     const userData = isLogin 
     ? { email, password } 
@@ -27,10 +26,8 @@ export default function Login() {
     try {
       const response = await axios.post(url, userData);
       console.log(response.data);
-      // Tratar resposta - redirecionar o usuário, mostrar mensagem de sucesso, etc.
     } catch (error) {
       console.error(error);
-      // Tratar erro - mostrar mensagem de erro, etc.
     }
   };
 

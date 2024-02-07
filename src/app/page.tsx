@@ -56,7 +56,7 @@ import { FormEvent, useState } from 'react';
   return (
     <>
       <Head>
-        <title>Account Balances</title>
+        <title>Account Balances Page.tsx detro do src/app</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
       </Head>
       <div className="bg-gray-100 p-8 min-h-screen flex items-center justify-center">
