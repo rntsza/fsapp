@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
   export default function AccountBalance() {
     const [checkingAmount, setCheckingAmount] = useState(0);
@@ -115,14 +114,13 @@ import 'react-toastify/dist/ReactToastify.css';
       updateAccountBalances(newCheckingAmount, newSavingsAmount);
     };
 
-    function handleLogoff() {
+    const handleLogoff = () => {
       localStorage.clear();
       return router.push('/');
     }
 
   return (
     <>
-    <ToastContainer />
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
       <div className="absolute bottom-4 right-4">
         <button onClick={handleLogoff} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Logoff </button>

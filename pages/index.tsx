@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,16 +54,7 @@ export default function Login() {
       };
 
     if (!userData.email || !userData.password) {
-      toast.error('Email and password are required.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error(' Email and password are required.');
       return;
     };
 
@@ -79,16 +69,7 @@ export default function Login() {
         const message = error.response.status === 404
           ? "🙁 User not found."
           : "🤔 An error occurred. Please try again.";
-        toast.error(message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          });
+        toast.error(message);
       } else {
         toast.error("An error occurred. Please try again later.");
       }
@@ -98,7 +79,7 @@ export default function Login() {
 
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
           <h1 className="text-xl font-bold mb-8">{isLogin ? 'Login' : 'Create Account'}</h1>
