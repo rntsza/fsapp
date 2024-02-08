@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,6 +12,32 @@ export default function Login() {
   const [savingsBalance, setSavingsBalance] = useState('');
   const [checkingsBalance, setCheckingsBalance] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No token found');
+      }
+
+      try {
+        const response = await axios.get('api/users/userData', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (response.data) {
+          console.log('User already authenticated', response.data.user.name)
+          router.push('/page');
+        }
+      } catch (error) {
+        console.log('Failed to fetch user data');
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
