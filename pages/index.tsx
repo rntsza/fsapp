@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,7 +17,6 @@ export default function Login() {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        // console.log('No token found');
         return;
       }
 
@@ -79,7 +79,7 @@ export default function Login() {
 
   return (
     <>
-      {/* <ToastContainer /> */}
+    <ToastContainer />
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
           <h1 className="text-xl font-bold mb-8">{isLogin ? 'Login' : 'Create Account'}</h1>
