@@ -1,7 +1,9 @@
 "use client"
-import { FormEvent, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
   export default function AccountBalance() {
     const [checkingAmount, setCheckingAmount] = useState(0);
@@ -9,7 +11,7 @@ import { useRouter } from 'next/router';
     const [transferAmount, setTransferAmount] = useState('');
     const [message, setMessage] = useState('');
     const router = useRouter();
-    const [userData, setUserData] = useState({} as { name?: string, checkingsBalance?: number, savingsBalance?: number } | null);;
+    const [userData, setUserData] = useState({} as { name?: string, checkingsBalance?: number, savingsBalance?: number, id?: number, email?: string } | null);;
 
     useEffect(() => {
       const fetchUserData = async () => {
@@ -38,50 +40,79 @@ import { useRouter } from 'next/router';
   
       fetchUserData();
     }, [router]);
-  
-    // const initializeAccounts = (event: FormEvent<HTMLFormElement>) => {
-    //   event.preventDefault();
-    //   const target = event.target as typeof event.target & {
-    //     checkingInitial: { value: string };
-    //     savingsInitial: { value: string };
-    //   };
-    //   const initialChecking = parseFloat(target.checkingInitial.value) || 0;
-    //   const initialSavings = parseFloat(target.savingsInitial.value) || 0;
-    //   setCheckingAmount(initialChecking);
-    //   setSavingsAmount(initialSavings);
-    //   setMessage('Accounts initialized successfully.');
-    // };
-  
+    
+    const updateAccountBalances = async (newCheckingAmount: number, newSavingsAmount: number) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        setMessage('Authentication error. Please log in again.');
+        return router.push('/login');
+      }
+    
+      try {
+        console.log(userData)
+        const response = await axios.patch('/api/users/patch', {
+          id: userData?.id,
+          name: userData?.name,
+          email: userData?.email,
+          checkingsBalance: newCheckingAmount,
+          savingsBalance: newSavingsAmount
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+    
+        if (response.status === 200) {
+          toast.success('🥳 Account balances updated successfully.');
+        } else {
+          toast.error('😭 Failed to update account balances. Please try again.');
+        }
+      } catch (error) {
+        toast.error('😭 Failed to update account balances. Please try again.');
+      }
+    };
+
     const handleTransferToSavings = () => {
       const amount = parseFloat(transferAmount);
       if (!amount || amount <= 0) {
-        setMessage('Enter a valid amount');
+        toast.error('🥺 Enter a valid amount');
         return;
       }
       if (amount > checkingAmount) {
-        setMessage('Insufficient funds in checking account');
+        toast.error('😖 Insufficient funds in checking account');
         return;
       }
-      setCheckingAmount(prev => prev - amount);
-      setSavingsAmount(prev => prev + amount);
+      const newCheckingAmount = checkingAmount - amount;
+      const newSavingsAmount = savingsAmount + amount;
+    
+      setCheckingAmount(newCheckingAmount);
+      setSavingsAmount(newSavingsAmount);
       setMessage(`Successfully transferred $${amount} to savings`);
       setTransferAmount('');
+    
+      updateAccountBalances(newCheckingAmount, newSavingsAmount);
     };
   
     const handleTransferToChecking = () => {
       const amount = parseFloat(transferAmount);
       if (!amount || amount <= 0) {
-        setMessage('Enter a valid amount');
+        toast.error('Enter a valid amount');
         return;
       }
       if (amount > savingsAmount) {
-        setMessage('Insufficient funds in savings account');
+        toast.error('Insufficient funds in savings account');
         return;
       }
-      setSavingsAmount(prev => prev - amount);
-      setCheckingAmount(prev => prev + amount);
+      const newSavingsAmount = savingsAmount - amount;
+      const newCheckingAmount = checkingAmount + amount;
+    
+      setSavingsAmount(newSavingsAmount);
+      setCheckingAmount(newCheckingAmount);
       setMessage(`Successfully transferred $${amount} to checking`);
       setTransferAmount('');
+    
+      updateAccountBalances(newCheckingAmount, newSavingsAmount);
     };
 
     function handleLogoff() {
@@ -91,23 +122,13 @@ import { useRouter } from 'next/router';
 
   return (
     <>
-      <div className="bg-gray-100 p-8 min-h-screen flex items-center justify-center">
-      <div className="absolute top-4 right-4">
+    <ToastContainer />
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
+      <div className="absolute bottom-4 right-4">
         <button onClick={handleLogoff} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"> Logoff </button>
       </div>
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden p-5">
+        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-700">{userData?.name}&apos;s Account Balances</h2>
-          {/* <form onSubmit={initializeAccounts} className="mt-4">
-            <div className="mb-4">
-              <label htmlFor="checkingInitial" className="block text-gray-700">Initial Checking Amount</label>
-              <input type="number" id="checkingInitial" name="checkingInitial" placeholder="Enter initial amount" className="text-gray-400 mt-1 p-2 w-full border rounded-md"/>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="savingsInitial" className="block text-gray-700">Initial Savings Amount</label>
-              <input type="number" id="savingsInitial" name="savingsInitial" placeholder="Enter initial amount" className="text-gray-400 mt-1 p-2 w-full border rounded-md"/>
-            </div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Initialize</button>
-          </form> */}
           {message && <p className="mt-4 text-center text-red-500">{message}</p>}
           {(checkingAmount !== null && savingsAmount !== null) && (
             <>

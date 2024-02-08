@@ -18,6 +18,7 @@ export default function Login() {
       const token = localStorage.getItem('token');
       if (!token) {
         console.log('No token found');
+        return;
       }
 
       try {
@@ -62,9 +63,18 @@ export default function Login() {
     } catch (error) {
       if (error.response) {
         const message = error.response.status === 404
-          ? "User not found."
-          : "An error occurred. Please try again.";
-        toast.error(message);
+          ? "🙁 User not found."
+          : "🤔 An error occurred. Please try again.";
+        toast.error(message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       } else {
         toast.error("An error occurred. Please try again later.");
       }
