@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
         const token = localStorage.getItem('token');
         if (!token) {
           console.error('No token found');
-          return router.push('/login');;
+          return router.push('/');;
         }
   
         try {
@@ -46,7 +46,7 @@ import 'react-toastify/dist/ReactToastify.css';
       if (!token) {
         console.error('No token found');
         setMessage('Authentication error. Please log in again.');
-        return router.push('/login');
+        return router.push('/');
       }
     
       try {
@@ -117,7 +117,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
     function handleLogoff() {
       localStorage.clear();
-      return router.push('/login');
+      return router.push('/');
     }
 
   return (
