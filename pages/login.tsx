@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,30 +11,44 @@ export default function Login() {
   const [name, setName] = useState('');
   const [savingsBalance, setSavingsBalance] = useState('');
   const [checkingsBalance, setCheckingsBalance] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const url = isLogin ? '/api/login' : '/api/users/create';
+    const url = isLogin ? '/api/login/auth' : '/api/users/create';
 
     const userData = isLogin 
     ? { email, password } 
     : { 
         name, 
         email, 
+        password,
         savingsBalance: parseFloat(savingsBalance), 
         checkingsBalance: parseFloat(checkingsBalance) 
       };
 
     try {
       const response = await axios.post(url, userData);
-      console.log(response.data);
+      if(response.data && response.data.token){
+        localStorage.setItem('token', response.data.token);
+        router.push('/page');
+      }
     } catch (error) {
-      console.error(error);
+      if (error.response) {
+        const message = error.response.status === 404
+          ? "User not found."
+          : "An error occurred. Please try again.";
+        toast.error(message);
+      } else {
+        toast.error("An error occurred. Please try again later.");
+      }
     }
   };
+  
 
   return (
     <>
+      <ToastContainer />
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(to right, #000000, #0a0f0b, #003d33)' }}>
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
           <h1 className="text-xl font-bold mb-8">{isLogin ? 'Login' : 'Create Account'}</h1>

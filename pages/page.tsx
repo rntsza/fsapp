@@ -1,12 +1,41 @@
 "use client"
-import Head from 'next/head';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
   export default function AccountBalance() {
     const [checkingAmount, setCheckingAmount] = useState(0);
     const [savingsAmount, setSavingsAmount] = useState(0);
     const [transferAmount, setTransferAmount] = useState('');
     const [message, setMessage] = useState('');
+    const router = useRouter();
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return router.push('/login');;
+        }
+  
+        try {
+          const response = await axios.get('api/users/userData', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+  
+          if (response.data) {
+            setCheckingAmount(response.data.user.checkingsBalance);
+            setSavingsAmount(response.data.user.savingsBalance);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user data', error);
+        }
+      };
+  
+      fetchUserData();
+    }, []);
   
     const initializeAccounts = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
