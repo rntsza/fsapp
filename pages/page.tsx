@@ -115,7 +115,7 @@ import 'react-toastify/dist/ReactToastify.css';
       updateAccountBalances(newCheckingAmount, newSavingsAmount);
     };
 
-    function handleLogoff() {
+    const handleLogoff = () => {
       localStorage.clear();
       return router.push('/');
     }
