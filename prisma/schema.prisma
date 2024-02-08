@@ -10,12 +10,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Account {
-  id      Int    @id @default(autoincrement())
-  type    String
-  balance Float
-}
-
 model User {
   id               Int      @id @default(autoincrement())
   name             String
