@@ -28,7 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
             }
           });
   
-          if (response.data) {
+          if (response?.data) {
             setUserData(response?.data?.user);
             setCheckingAmount(response?.data?.user?.checkingsBalance);
             setSavingsAmount(response?.data?.user?.savingsBalance);
@@ -97,7 +97,7 @@ import 'react-toastify/dist/ReactToastify.css';
     const handleTransferToChecking = () => {
       const amount = parseFloat(transferAmount);
       if (!amount || amount <= 0) {
-        toast.error('Enter a valid amount');
+        toast.error('🥺 Enter a valid amount');
         return;
       }
       if (amount > savingsAmount) {

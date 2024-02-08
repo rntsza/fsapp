@@ -1,10 +1,10 @@
-import prisma from '../../../lib/prisma';
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
-  } else if (req.method === 'POST') {
+  } else if (req.method === "POST") {
     const { type, balance } = req.body;
     try {
       const user = await prisma.user.create({

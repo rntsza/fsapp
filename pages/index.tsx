@@ -17,7 +17,7 @@ export default function Login() {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.log('No token found');
+        // console.log('No token found');
         return;
       }
 
@@ -53,6 +53,20 @@ export default function Login() {
         savingsBalance: parseFloat(savingsBalance), 
         checkingsBalance: parseFloat(checkingsBalance) 
       };
+
+    if (!userData.email || !userData.password) {
+      toast.error('Email and password are required.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    };
 
     try {
       const response = await axios.post(url, userData);
